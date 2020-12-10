@@ -1,0 +1,23 @@
+{
+  "name": "nodejs_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MorePositive/NodeJS_server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MorePositive/NodeJS_server/issues"
+  },
+  "homepage": "https://github.com/MorePositive/NodeJS_server#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
