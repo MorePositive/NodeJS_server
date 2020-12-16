@@ -19,5 +19,9 @@
   "homepage": "https://github.com/MorePositive/NodeJS_server#readme",
   "devDependencies": {
     "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.11.8"
   }
 }
