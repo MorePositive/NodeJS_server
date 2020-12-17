@@ -12,7 +12,8 @@ const PORT = process.env.PORT || 3000;
 (function() {
     const URL = "mongodb+srv://MorePositive:bEsrT8O1m2aUJW5M@cluster0.y2laz.mongodb.net/vehiclesDB?retryWrites=true&w=majority";
     mongoose.connect(URL, { 
-        useNewUrlParser: true, 
+        useNewUrlParser: true,
+        useFindAndModify: true,
         useUnifiedTopology: true 
     })
     .then(() => {
@@ -52,4 +53,11 @@ app.get("/car", () => {
     Car.findById("5fd9d6eb6702912f3c607b39")
         .then(data => console.log(data))
         .catch(error => console.log(error));
+});
+
+app.get("/delete/:id", (req, res) => {
+  const id = req.params.id;
+  Car.findOneAndDelete(id)
+    .then(() => console.log(`car with id: ${id} has been deleted`))
+    .catch((error) => console.log(error))
 });
