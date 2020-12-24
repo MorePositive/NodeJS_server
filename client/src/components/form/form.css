@@ -1,0 +1,42 @@
+.form-page {
+  display: flex;
+}
+
+.form, .form-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.form {
+  justify-content: center;
+  align-items: center;
+  width: 50vw;
+}
+
+.form-group {
+  width: 400px;
+}
+
+.form-wrapper, .label {
+  margin-bottom: 15px;
+}
+
+.form-input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #161616;
+}
+
+.form-input:focus {
+  outline: none;
+}
+
+.buttons-group {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.invalid {
+  color: red;
+}

@@ -1,0 +1,5 @@
+{
+  "port": 4500,
+  "jwtSecret": "my access task",
+  "MongoURL": "mongodb+srv://MorePositive:bEsrT8O1m2aUJW5M@cluster0.y2laz.mongodb.net/vehiclesDB?retryWrites=true&w=majority"
+}

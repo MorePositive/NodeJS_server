@@ -1,0 +1,10 @@
+.login-btn {
+  margin-right: 20px;
+}
+
+.auth-page {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+}

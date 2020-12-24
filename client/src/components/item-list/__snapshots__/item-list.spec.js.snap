@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ItemList component should render item 1`] = `
+<ul
+  className="card"
+  key="asd@ads.com"
+>
+  <li
+    className="card-item"
+  >
+    Ivan
+  </li>
+  <li
+    className="card-item"
+  >
+    Ivanov
+  </li>
+  <li
+    className="card-item"
+  >
+    50887562
+  </li>
+  <li
+    className="card-item"
+  >
+    asd@ads.com
+  </li>
+</ul>
+`;
+
+exports[`ItemList component should render no-data paragraph 1`] = `
+<p
+  className="no-data"
+>
+  There is no data yet
+</p>
+`;

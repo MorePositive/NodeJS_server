@@ -1,17 +1,13 @@
 const express = require("express");
+const config = require("config");
 const mongoose = require("mongoose");
-const Car = require("./models/car");
-const { createFolder, createFile } = require("./fs/fs");
 
 const app = express();
-
-const PORT = process.env.PORT || 3000;
+const PORT = config.get("port");
 
 // connecting to database
-
 (function() {
-    const URL = "mongodb+srv://MorePositive:bEsrT8O1m2aUJW5M@cluster0.y2laz.mongodb.net/vehiclesDB?retryWrites=true&w=majority";
-    mongoose.connect(URL, { 
+    mongoose.connect(config.get("MongoURL"), { 
         useNewUrlParser: true,
         useFindAndModify: false,
         useUnifiedTopology: true 
@@ -21,57 +17,12 @@ const PORT = process.env.PORT || 3000;
             console.log(`Server is running on port: ${PORT}`);
         });
     })
-    .catch(error => console.log(error));
+    .catch(error => {
+        console.log("Server error", error.message);
+        process.exit(1);
+    });
 })();
 
-// routes
-
-app.get("/", () => console.log("Welcome to home page"));
-app.get("/about", () => console.log("About page welcomes you"));
-app.get("/contacts", () => console.log("You are on 'Contacts' page"));
-app.get("/folder", () => createFolder());
-app.get("/newfile", () => createFile());
-
-app.post("/add-car", () => {
-    const car = new Car({
-        mark: "Mercedes",
-        model: "C43AMG",
-        year: 2017
-    });
-    car.save()
-        .then(data => console.log("Car has been added to database"))
-        .catch(error => console.log(error));
-});
-
-app.get("/cars", () => {
-    Car.find()
-        .then(data => {
-            if (!data.length) {
-                console.log("You have not stored data");
-            } else {
-                console.log(data);
-            }
-        })
-        .catch(error => console.log(error));
-});
-
-app.get("/car/:id", (req) => {
-    const id = req.params.id;
-    Car.findById(id)
-        .then(data => console.log(data))
-        .catch(error => console.log(error));
-});
-
-app.put("/update/:id", (req) => {
-    const id = req.params.id;
-    Car.findOneAndUpdate({ _id: id }, { mark: "BMW" }, { new: true })
-        .then((data) => console.log(data))
-        .catch(error => console.log(error));
-});
-
-app.delete("/delete/:id", (req) => {
-  const id = req.params.id;
-  Car.findOneAndDelete(id)
-    .then(() => console.log(`car with id: ${id} has been deleted`))
-    .catch(error => console.log(error));
-});
+app.use(express.json({ extended: true }));
+app.use("/api/auth", require("./routes/auth.routes"));
+app.use("/api/cars", require("./routes/car-data.routes"));

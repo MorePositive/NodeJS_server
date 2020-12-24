@@ -1,7 +1,10 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const { Schema, model } = require("mongoose");
 
 const carSchema = new Schema({
+    owner: {
+        type: String,
+        required: true
+    },
     mark: {
         type: String,
         required: true
@@ -11,10 +14,10 @@ const carSchema = new Schema({
         required: true
     },
     year: {
-        type: Number,
+        type: String,
         required: false
     }
 });
 
-const Car = mongoose.model("Car", carSchema);
+const Car = model("Car", carSchema);
 module.exports = Car;

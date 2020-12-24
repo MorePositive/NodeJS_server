@@ -1,0 +1,28 @@
+.item-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50vw;
+  height: 600px;
+  overflow-y: scroll;
+}
+
+.card, .no-data {
+  text-align: center;
+}
+
+.card {
+  background-color: #b4b4b4;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  width: 400px;
+  padding: 10px;
+  list-style: none;
+}
+
+.delete-btn {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 8px;
+}
