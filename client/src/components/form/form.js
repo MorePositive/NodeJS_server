@@ -1,74 +1,41 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
 import ItemList from '../item-list/item-list';
-
-import { initialState } from './initial-state';
+import { getCars, postCar, deleteCar, resetCarState, onChangeCars } from '../../redux/actions/cars'
 import './form.css';
 
-export default class Form extends Component {
-  
-  state = {
-    data: [],
-    owner: "",
-    mark: "",
-    model: "",
-    year: ""
-  }
+class Form extends Component {
 
   // getAll cars from database 
-  updateList = () => {
-    axios.get("/api/cars/getAll")
-    .then(data => this.setState({ data: data.data }))
-    .catch(e => console.log(e));
-  };
-
   componentDidMount() {
-    this.updateList();
+    this.props.getCars();
   };
 
-  getInitialState = () => {
-    this.setState(initialState);
-  };
-
-  handleChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
+  handleChange = e => {
+    this.props.onChangeCars(e.target.name, e.target.value);
   };
 
   // send car data to database
-  postItemHandler = (e) => {
+  postItemHandler = e => {
     e.preventDefault();
-    const { owner, model, mark, year } = this.state;
-    const carData = { owner, model, mark, year };
-    axios.post("/api/cars/add-car", carData)
-      .then((data) => {
-        window.M.toast({ html: data.data.message });
-        this.getInitialState();
-        this.updateList();
-      })
-      .catch(e => console.log(e));
+    this.props.postCar();
+    this.props.resetCarState();
   };
 
   // delete car from database
-  deleteItemHandler = (id) => {
-    axios.delete(`/api/cars/${id}`)
-      .then(data => {
-        window.M.toast({ html: data.data.message });
-        this.updateList();
-      })
-      .catch(e => console.log(e))
-  };
+  // deleteItemHandler = (id) => {
+  //   this.props.deleteCar(id);
+  // }; ?????
 
   // reset form
-  onCancel = (e) => {
+  onCancel = e => {
     e.preventDefault();
-    this.getInitialState();
+    this.props.resetCarState();
   };
 
   render() {
 
-    const { data, owner, model, mark, year } = this.state;
+    const { owner, model, mark, year } = this.props;
 
     return (
       <div className="form-page">
@@ -134,10 +101,29 @@ export default class Form extends Component {
                   </div>
                 </div>
         </form>
-        <ItemList 
-          data={data} 
-          deleteItemHandler={this.deleteItemHandler} />
+        <ItemList />
       </div>
     )
   }
 };
+
+const mapStateToProps = state => {
+  return {
+    cars: state.cars.cars,
+    owner: state.cars.owner,
+    mark: state.cars.mark,
+    model: state.cars.model,
+    year: state.cars.year
+  }
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getCars: () => dispatch(getCars()),
+    postCar: () => dispatch(postCar()),
+    onChangeCars: (name, value) => dispatch(onChangeCars(name, value)),
+    resetCarState: () => dispatch(resetCarState())
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form);

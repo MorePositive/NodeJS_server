@@ -1,40 +1,25 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { loginStoreToken } from '../../redux/actions/user';
 import Header from "../header/header";
 import Auth from '../auth/auth';
 import Form from '../form/form';
 import 'materialize-css';
 import './app.css';
 
-export default class App extends Component {
-
-  state = {
-    data: [],
-    token: null,
-    userId: null,
-    isLoggedIn: false
-  }
+class App extends Component {
 
   componentDidMount() {
     const data = JSON.parse(localStorage.getItem("userData"));
     if ( data && data.token ) {
-      this.loginStoreToken(data.token, data.userId);
+      this.props.loginStoreToken(data.token, data.userId);
     }
-  };
-
-  loginStoreToken = (token, userId) => {
-    this.setState({ token, userId, isLoggedIn: true });
-    localStorage.setItem("userData", JSON.stringify({ token, userId }));
-  };
-
-  logoutDeleteToken = () => {
-    this.setState({ token: null, userId: null, isLoggedIn: false });
-    localStorage.removeItem("userData");
   };
 
   render() {
 
-    const { isLoggedIn } = this.state;
+    const { isLoggedIn } = this.props;
 
     return (
       <div className="App">
@@ -45,17 +30,15 @@ export default class App extends Component {
             (
               <>
               <Route path="/form" exact>
-                <Header logoutDeleteToken={this.logoutDeleteToken} />
-                <Form onItemAdded={this.addItem}
-                      clearData={this.clearData}
-                      getPost={this.getPost} />
+                <Header />
+                <Form />
               </Route>
               <Redirect to="/form" />
               </>
               ) : (
               <>
               <Route path="/auth" exact>
-                <Auth loginStoreToken={this.loginStoreToken} />
+                <Auth />
               </Route>
               <Redirect to="/auth" />
               </>
@@ -67,3 +50,19 @@ export default class App extends Component {
     );
   }
 };
+
+const mapStateToProps = state => {
+  return {
+    token: state.user.token,
+    userId: state.user.userId,
+    isLoggedIn: state.user.isLoggedIn
+  }
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    loginStoreToken: (token, userId) => dispatch(loginStoreToken(token, userId)),
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,36 +1,27 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { onChangeUser, registerUser, loginUser, resetUserState } from '../../redux/actions/user';
 import './auth.css';
 
-export default class Auth extends Component {
+class Auth extends Component {
 
-  state = {
-    email: "",
-    password: ""
-  }
-
-  handleChange = (e) => {
-    this.setState({
-      [e.target.name] : e.target.value
-    });
+  handleChange = e => {
+    this.props.onChangeUser(e.target.name, e.target.value);
   };
 
   onRegisterHandler = () => {
-    axios.post("/api/auth/register", {...this.state})
-      .then((data) => window.M.toast({ html: data.data.message }))
-      .catch(e => window.M.toast({ html: e.response.data.message }));
+    this.props.registerUser();
+    this.props.resetUserState();
   };
 
   onLoginHandler = () => {
-    axios.post("/api/auth/login", {...this.state})
-    .then((data) => {
-      const { token, userId } = data.data;
-      this.props.loginStoreToken(token, userId);
-    })
-    .catch(e => window.M.toast({ html: e.response.data.message }));
+    this.props.loginUser();
+    this.props.resetUserState();
   };
 
   render() {
+    
+    const { email, password } = this.props;
 
     return (
       <div className="auth-page">
@@ -46,6 +37,7 @@ export default class Auth extends Component {
                       id="email" 
                       type="email"
                       name="email"
+                      value={email}
                       className="validate"
                       autoComplete="current-email" />
                     <label 
@@ -60,6 +52,7 @@ export default class Auth extends Component {
                       id="password" 
                       type="password"
                       name="password"
+                      value={password}
                       className="validate" 
                       autoComplete="current-password" />
                     <label 
@@ -89,3 +82,21 @@ export default class Auth extends Component {
     )
   }
 };
+
+const mapStateToProps = state => {
+  return {
+    email: state.user.email,
+    password: state.user.password
+  }
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onChangeUser: (name, value) => dispatch(onChangeUser(name, value)),
+    registerUser: () => dispatch(registerUser()),
+    loginUser: () => dispatch(loginUser()),
+    resetUserState: () => dispatch(resetUserState())
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

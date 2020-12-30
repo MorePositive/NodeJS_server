@@ -1,14 +1,17 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteCar } from '../../redux/actions/cars';
 import './item-list.css';
 
-const ItemList = ({ data, deleteItemHandler }) => {
-
+const ItemList = () => {
+  const cars = useSelector(state => state.cars.cars);
+  const dispatch = useDispatch();
   return (
     <div className="item-list">
       { 
-        !data.length 
+        !cars.length 
           ?  <p className="no-data">There is no data yet</p>
-          :  data.map(({ _id, owner, model, mark, year, id, userId, title, body}) => {
+          :  cars.map(({ _id, owner, model, mark, year, id, userId, title, body}) => {
               return (
                 <ul  className="card" 
                       key={mark || id}>
@@ -18,7 +21,7 @@ const ItemList = ({ data, deleteItemHandler }) => {
                   <li className="card-item">{year || body}</li>
                   <li className="card-item delete-btn">
                     <button
-                      onClick={() => deleteItemHandler(_id)}
+                      onClick={() => dispatch(deleteCar(_id))}
                       className="btn btn waves-effect waves-light red"
                       >
                         delete
